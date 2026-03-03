@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Events — LadiesOwnly</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400;1,700&family=Raleway:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        /* ── Featured Event ── */
+        .featured-event { background: var(--ivory); padding: 80px 60px; }
+        .featured-event-inner {
+            background: var(--charcoal); display: grid; grid-template-columns: 1fr 1fr; overflow: hidden;
+        }
+        .featured-event-visual {
+            background: var(--deep-wine); padding: 60px; position: relative;
+            display: flex; flex-direction: column; justify-content: flex-end; min-height: 480px;
+        }
+        .featured-event-visual::before {
+            content: ''; position: absolute; inset: 0;
+            background: radial-gradient(ellipse at top right, rgba(201,164,92,0.15) 0%, transparent 60%);
+        }
+        .event-date-badge {
+            position: absolute; top: 40px; left: 40px;
+            background: var(--gold); padding: 12px 16px; text-align: center; z-index: 1;
+        }
+        .event-date-day { font-family: 'Playfair Display', serif; font-size: 2rem; font-weight: 700; color: var(--charcoal); display: block; line-height: 1; }
+        .event-date-month { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: var(--charcoal); }
+        .featured-type { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); margin-bottom: 12px; position: relative; z-index: 1; }
+        .featured-event-title { font-family: 'Playfair Display', serif; font-size: 2rem; font-weight: 700; color: var(--ivory); line-height: 1.2; position: relative; z-index: 1; }
+        .featured-event-details { padding: 60px; display: flex; flex-direction: column; justify-content: center; }
+        .featured-event-details .section-tag { margin-bottom: 16px; }
+        .featured-desc { font-size: 0.95rem; line-height: 1.85; color: rgba(246,241,233,0.55); margin-bottom: 40px; }
+        .event-meta { display: flex; flex-direction: column; gap: 14px; margin-bottom: 40px; }
+        .event-meta-item { display: flex; align-items: center; gap: 14px; font-size: 0.86rem; color: rgba(246,241,233,0.6); }
+        .event-meta-icon { width: 28px; height: 28px; border: 1px solid rgba(201,164,92,0.3); display: flex; align-items: center; justify-content: center; color: var(--gold); font-size: 0.8rem; flex-shrink: 0; }
+        .event-meta-item strong { color: var(--ivory); font-weight: 600; }
+
+        /* ── Events Grid ── */
+        .events-section { background: var(--cream); padding: 100px 60px; }
+        .events-header { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 60px; }
+        .events-header .section-heading { color: var(--text-dark); }
+        .events-tabs { display: flex; gap: 0; border-bottom: 1px solid rgba(92,16,51,0.12); }
+        .events-tab {
+            padding: 12px 28px; background: transparent; border: none;
+            font-family: 'Raleway', sans-serif; font-size: 0.8rem; font-weight: 600;
+            letter-spacing: 0.1em; text-transform: uppercase; color: var(--warm-gray);
+            cursor: none; border-bottom: 2px solid transparent; margin-bottom: -1px; transition: all 0.25s;
+        }
+        .events-tab.active { color: var(--burgundy); border-bottom-color: var(--gold); }
+        .events-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+        .event-card {
+            background: var(--ivory); overflow: hidden; transition: all 0.3s ease;
+        }
+        .event-card:hover { transform: translateY(-4px); box-shadow: 0 20px 48px rgba(28,8,18,0.08); }
+        .event-card-header { background: var(--deep-wine); padding: 32px; position: relative; min-height: 160px; display: flex; flex-direction: column; justify-content: flex-end; }
+        .event-card-header::before {
+            content: ''; position: absolute; inset: 0;
+            background: radial-gradient(ellipse at top right, rgba(201,164,92,0.12) 0%, transparent 70%);
+        }
+        .event-card-date { position: absolute; top: 20px; right: 20px; background: var(--gold); padding: 8px 12px; text-align: center; }
+        .card-date-day { font-family: 'Playfair Display', serif; font-size: 1.3rem; font-weight: 700; color: var(--charcoal); display: block; line-height: 1; }
+        .card-date-month { font-size: 0.64rem; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: var(--charcoal); }
+        .event-card-type { font-size: 0.66rem; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--gold); margin-bottom: 8px; position: relative; }
+        .event-card-title { font-family: 'Playfair Display', serif; font-size: 1.1rem; font-weight: 700; color: var(--ivory); position: relative; line-height: 1.3; }
+        .event-card-body { padding: 28px 32px; }
+        .event-card-desc { font-size: 0.85rem; line-height: 1.75; color: var(--warm-gray); margin-bottom: 24px; }
+        .event-card-footer { display: flex; align-items: center; justify-content: space-between; }
+        .event-spots { font-size: 0.76rem; font-weight: 600; color: var(--warm-gray); }
+        .event-spots.low { color: #C9614C; }
+        .event-register { font-size: 0.76rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--burgundy); text-decoration: none; transition: color 0.3s; }
+        .event-register:hover { color: var(--gold); }
+        .event-format-badge {
+            display: inline-block; padding: 4px 10px;
+            font-size: 0.65rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+        .badge-virtual { background: rgba(201,164,92,0.15); color: var(--gold); }
+        .badge-inperson { background: rgba(92,16,51,0.1); color: var(--burgundy); }
+
+        /* ── Past Highlights ── */
+        .past-events { background: var(--charcoal); padding: 100px 60px; }
+        .past-events .section-heading { color: var(--ivory); margin-bottom: 60px; max-width: 480px; }
+        .highlights-grid { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 2px; }
+        .highlight { background: var(--deep-wine); padding: 48px 40px; position: relative; overflow: hidden; }
+        .highlight.large { grid-row: span 2; }
+        .highlight::before {
+            content: ''; position: absolute; inset: 0;
+            background: radial-gradient(ellipse at top left, rgba(201,164,92,0.08) 0%, transparent 60%);
+        }
+        .highlight-date { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--gold); margin-bottom: 16px; display: block; position: relative; }
+        .highlight-title { font-family: 'Playfair Display', serif; font-weight: 700; color: var(--ivory); line-height: 1.3; margin-bottom: 16px; position: relative; }
+        .highlight.large .highlight-title { font-size: 1.8rem; }
+        .highlight:not(.large) .highlight-title { font-size: 1.1rem; }
+        .highlight-stat { font-family: 'Playfair Display', serif; font-size: 2.5rem; font-weight: 700; color: var(--gold); display: block; position: relative; }
+        .highlight-stat-label { font-size: 0.76rem; color: rgba(246,241,233,0.4); text-transform: uppercase; letter-spacing: 0.1em; position: relative; }
+
+        /* ── Newsletter ── */
+        .event-newsletter { background: var(--burgundy); padding: 100px 60px; }
+        .newsletter-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+        .newsletter-text .section-heading { color: var(--ivory); margin-bottom: 16px; }
+        .newsletter-text .section-heading em { font-style: italic; color: var(--gold); }
+        .newsletter-text p { font-size: 0.95rem; line-height: 1.8; color: rgba(246,241,233,0.55); }
+        .newsletter-form { display: flex; flex-direction: column; gap: 16px; }
+        .newsletter-form input {
+            background: rgba(246,241,233,0.08); border: 1px solid rgba(201,164,92,0.2);
+            padding: 16px 20px; font-family: 'Raleway', sans-serif; font-size: 0.88rem;
+            color: var(--ivory); outline: none; transition: border-color 0.3s; width: 100%;
+        }
+        .newsletter-form input::placeholder { color: rgba(246,241,233,0.3); }
+        .newsletter-form input:focus { border-color: var(--gold); }
+        .newsletter-form button {
+            background: var(--gold); color: var(--charcoal);
+            padding: 16px 32px; font-family: 'Raleway', sans-serif;
+            font-size: 0.82rem; font-weight: 700; letter-spacing: 0.13em; text-transform: uppercase;
+            border: none; cursor: none; transition: all 0.3s; align-self: flex-start;
+        }
+        .newsletter-form button:hover { background: var(--ivory); transform: translateY(-2px); }
+        .newsletter-note { font-size: 0.76rem; color: rgba(246,241,233,0.3); }
+
+        @media (max-width: 900px) {
+            .featured-event { padding: 40px 24px; }
+            .featured-event-inner { grid-template-columns: 1fr; }
+            .featured-event-details { padding: 40px 32px; }
+            .events-section { padding: 60px 24px; }
+            .events-header { flex-direction: column; align-items: flex-start; gap: 24px; }
+            .events-grid { grid-template-columns: 1fr; gap: 16px; }
+            .past-events { padding: 60px 24px; }
+            .highlights-grid { grid-template-columns: 1fr; }
+            .highlight.large { grid-row: span 1; }
+            .event-newsletter { padding: 60px 24px; }
+            .newsletter-inner { grid-template-columns: 1fr; gap: 40px; }
+        }
+    </style>
+</head>
+<body>
+<div class="cursor-dot" id="cursorDot"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<nav id="navbar">
+    <a href="index.html" class="nav-logo">Ladies<span>Ownly</span></a>
+    <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="community.html">Community</a></li>
+        <li><a href="events.html">Events</a></li>
+        <li><a href="join.html" class="nav-cta">Join Now</a></li>
+    </ul>
+    <button class="nav-toggle" aria-label="Menu"><span></span><span></span><span></span></button>
+</nav>
+
+<div class="page-hero">
+    <div class="page-hero-content">
+        <span class="page-hero-eyebrow">Events & Experiences</span>
+        <h1>Where Women<br>Come <em>Together</em></h1>
+        <p>From intimate masterclasses to global summits — every LadiesOwnly event is designed to connect, inspire, and advance the women who attend.</p>
+    </div>
+</div>
+
+<!-- Featured Event -->
+<section class="featured-event">
+    <div class="featured-event-inner">
+        <div class="featured-event-visual">
+            <div class="event-date-badge">
+                <span class="event-date-day">22</span>
+                <span class="event-date-month">March</span>
+            </div>
+            <div class="featured-type">Virtual Summit · 2026</div>
+            <div class="featured-event-title">The Women's Leadership & Wealth Summit</div>
+        </div>
+        <div class="featured-event-details">
+            <span class="section-tag">Featured Event</span>
+            <p class="featured-desc">Our biggest virtual event of the year brings together 200+ women leaders, founders, and changemakers for a full day of keynotes, workshops, and 1:1 networking sessions.</p>
+            <div class="event-meta">
+                <div class="event-meta-item"><div class="event-meta-icon">📅</div><span>Saturday, 22 March 2026 · 9:00 AM – 6:00 PM GMT</span></div>
+                <div class="event-meta-item"><div class="event-meta-icon">💻</div><span>Virtual — <strong>Zoom + LadiesOwnly Platform</strong></span></div>
+                <div class="event-meta-item"><div class="event-meta-icon">🎟</div><span><strong>Free</strong> for members · £49 for non-members</span></div>
+                <div class="event-meta-item"><div class="event-meta-icon">👥</div><span><strong>340 spots remaining</strong> of 500</span></div>
+            </div>
+            <a href="join.html" class="btn-primary">Register Now <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+        </div>
+    </div>
+</section>
+
+<!-- Events Grid -->
+<section class="events-section">
+    <div class="events-header">
+        <div><span class="section-tag">Upcoming Events</span><h2 class="section-heading">What's On</h2></div>
+        <div class="events-tabs">
+            <button class="events-tab active">All</button>
+            <button class="events-tab">Virtual</button>
+            <button class="events-tab">In-Person</button>
+        </div>
+    </div>
+    <div class="events-grid" data-stagger>
+        <div class="event-card reveal">
+            <div class="event-card-header">
+                <div class="event-card-date"><span class="card-date-day">08</span><span class="card-date-month">Mar</span></div>
+                <span class="event-format-badge badge-virtual">Virtual</span>
+                <div class="event-card-type">Masterclass</div>
+                <div class="event-card-title">Negotiating Your Worth: Salary & Equity Masterclass</div>
+            </div>
+            <div class="event-card-body">
+                <p class="event-card-desc">Learn proven negotiation frameworks from women who've secured 40–80% salary increases. Role-play scenarios, live Q&A, and take-home scripts included.</p>
+                <div class="event-card-footer"><span class="event-spots low">⚡ 12 spots left</span><a href="join.html" class="event-register">Register →</a></div>
+            </div>
+        </div>
+        <div class="event-card reveal">
+            <div class="event-card-header">
+                <div class="event-card-date"><span class="card-date-day">15</span><span class="card-date-month">Mar</span></div>
+                <span class="event-format-badge badge-inperson">Lagos · In-Person</span>
+                <div class="event-card-type">Networking</div>
+                <div class="event-card-title">LadiesOwnly Lagos Collective — March Mixer</div>
+            </div>
+            <div class="event-card-body">
+                <p class="event-card-desc">Our monthly in-person gathering in Lagos for women across tech, finance, fashion, and beyond. Drinks, connections, and conversations that matter.</p>
+                <div class="event-card-footer"><span class="event-spots">48 spots remaining</span><a href="join.html" class="event-register">Register →</a></div>
+            </div>
+        </div>
+        <div class="event-card reveal">
+            <div class="event-card-header">
+                <div class="event-card-date"><span class="card-date-day">29</span><span class="card-date-month">Mar</span></div>
+                <span class="event-format-badge badge-virtual">Virtual</span>
+                <div class="event-card-type">Workshop</div>
+                <div class="event-card-title">From Side Hustle to Full-Time: The Business Transition Playbook</div>
+            </div>
+            <div class="event-card-body">
+                <p class="event-card-desc">A practical 3-hour workshop for women ready to make their business their main income. Financial planning, legal structure, and emotional readiness included.</p>
+                <div class="event-card-footer"><span class="event-spots">92 spots remaining</span><a href="join.html" class="event-register">Register →</a></div>
+            </div>
+        </div>
+        <div class="event-card reveal">
+            <div class="event-card-header">
+                <div class="event-card-date"><span class="card-date-day">05</span><span class="card-date-month">Apr</span></div>
+                <span class="event-format-badge badge-inperson">London · In-Person</span>
+                <div class="event-card-type">Retreat</div>
+                <div class="event-card-title">Weekend Wellness Retreat: Rest, Reset, Rise</div>
+            </div>
+            <div class="event-card-body">
+                <p class="event-card-desc">A two-day luxury wellness retreat for women who need to refill their cup. Yoga, workshops, journaling, and a community dinner in the English countryside.</p>
+                <div class="event-card-footer"><span class="event-spots low">⚡ 8 spots left</span><a href="join.html" class="event-register">Register →</a></div>
+            </div>
+        </div>
+        <div class="event-card reveal">
+            <div class="event-card-header">
+                <div class="event-card-date"><span class="card-date-day">12</span><span class="card-date-month">Apr</span></div>
+                <span class="event-format-badge badge-virtual">Virtual</span>
+                <div class="event-card-type">Panel</div>
+                <div class="event-card-title">Raising Funding as a Woman Founder in 2026</div>
+            </div>
+            <div class="event-card-body">
+                <p class="event-card-desc">Four women who've raised seed to Series B share their real experiences — the rejections, the breakthroughs, and what they'd do differently.</p>
+                <div class="event-card-footer"><span class="event-spots">200+ spots remaining</span><a href="join.html" class="event-register">Register →</a></div>
+            </div>
+        </div>
+        <div class="event-card reveal">
+            <div class="event-card-header">
+                <div class="event-card-date"><span class="card-date-day">19</span><span class="card-date-month">Apr</span></div>
+                <span class="event-format-badge badge-inperson">Mumbai · In-Person</span>
+                <div class="event-card-type">Workshop</div>
+                <div class="event-card-title">Dressing Your Brand: Personal Style for Executive Women</div>
+            </div>
+            <div class="event-card-body">
+                <p class="event-card-desc">A half-day workshop with a celebrity stylist on how to dress with intention and confidence at every stage of your career. Includes a personal style audit.</p>
+                <div class="event-card-footer"><span class="event-spots">31 spots remaining</span><a href="join.html" class="event-register">Register →</a></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Past Highlights -->
+<section class="past-events">
+    <span class="section-tag">Looking Back</span>
+    <h2 class="section-heading">Past Highlights</h2>
+    <div class="highlights-grid">
+        <div class="highlight large reveal">
+            <span class="highlight-date">November 2025 — Annual Summit</span>
+            <h3 class="highlight-title">The 2025 LadiesOwnly Global Summit: "Unbreakable"</h3>
+            <span class="highlight-stat">2,800</span>
+            <span class="highlight-stat-label">attendees from 47 countries</span>
+        </div>
+        <div class="highlight reveal">
+            <span class="highlight-date">September 2025</span>
+            <h3 class="highlight-title">Pitch Perfect: Women's Funding Day</h3>
+            <span class="highlight-stat">$1.2M</span>
+            <span class="highlight-stat-label">secured by attendees post-event</span>
+        </div>
+        <div class="highlight reveal">
+            <span class="highlight-date">July 2025</span>
+            <h3 class="highlight-title">Global Wellness Week</h3>
+            <span class="highlight-stat">12,000+</span>
+            <span class="highlight-stat-label">participants across 5 days</span>
+        </div>
+        <div class="highlight reveal">
+            <span class="highlight-date">May 2025</span>
+            <h3 class="highlight-title">Mentorship Speed Dating — Season 4</h3>
+            <span class="highlight-stat">400</span>
+            <span class="highlight-stat-label">mentor-mentee matches made</span>
+        </div>
+        <div class="highlight reveal">
+            <span class="highlight-date">March 2025</span>
+            <h3 class="highlight-title">International Women's Day Festival</h3>
+            <span class="highlight-stat">8,500+</span>
+            <span class="highlight-stat-label">participants globally</span>
+        </div>
+    </div>
+</section>
+
+<!-- Newsletter -->
+<section class="event-newsletter">
+    <div class="newsletter-inner">
+        <div class="newsletter-text reveal">
+            <span class="section-tag">Never Miss an Event</span>
+            <h2 class="section-heading">Get Events Delivered<br>to Your <em>Inbox</em></h2>
+            <p>Sign up for our weekly events digest and be the first to know about new masterclasses, retreats, and networking opportunities near you.</p>
+        </div>
+        <div class="newsletter-form reveal">
+            <input type="text" placeholder="Your Name">
+            <input type="email" placeholder="Your Email Address">
+            <button type="button">Subscribe to Events <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="display:inline;vertical-align:middle;margin-left:4px"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+            <p class="newsletter-note">No spam. Unsubscribe anytime. Member events are always free.</p>
+        </div>
+    </div>
+</section>
+
+<footer>
+    <div class="footer-top">
+        <div class="footer-brand"><a href="index.html" class="footer-logo-link">Ladies<span>Ownly</span></a><p>A safe, empowering space for women to connect, grow, and thrive — built by women, for women.</p></div>
+        <div class="footer-col"><h4>Platform</h4><ul><li><a href="community.html">Communities</a></li><li><a href="events.html">Events</a></li><li><a href="about.html#mentorship">Mentorship</a></li><li><a href="join.html">Membership</a></li></ul></div>
+        <div class="footer-col"><h4>Company</h4><ul><li><a href="about.html">About Us</a></li><li><a href="about.html#values">Our Values</a></li><li><a href="about.html#team">Team</a></li><li><a href="#">Press</a></li></ul></div>
+        <div class="footer-col"><h4>Support</h4><ul><li><a href="#">Help Centre</a></li><li><a href="#">Privacy Policy</a></li><li><a href="#">Terms of Use</a></li><li><a href="#">Contact</a></li></ul></div>
+    </div>
+    <div class="footer-bottom"><p class="footer-copy">© 2026 LadiesOwnly. All rights reserved.</p><div class="footer-social"><a href="#">IG</a><a href="#">TW</a><a href="#">LI</a><a href="#">YT</a></div></div>
+</footer>
+
+<script src="js/main.js"></script>
+<script>
+    document.querySelectorAll('.events-tab').forEach(tab => {
+        tab.addEventListener('click', () => {
+            document.querySelectorAll('.events-tab').forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+        });
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Join — LadiesOwnly</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400;1,700&family=Raleway:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        /* ── Plans ── */
+        .plans { background: var(--ivory); padding: 100px 60px; }
+        .plans-header { text-align: center; margin-bottom: 72px; }
+        .plans-header .section-heading { color: var(--text-dark); }
+        .plans-header p { font-size: 1rem; line-height: 1.8; color: var(--warm-gray); max-width: 480px; margin: 16px auto 0; }
+        .plans-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; max-width: 900px; margin: 0 auto; }
+
+        .plan-card { background: var(--cream); padding: 60px 52px; position: relative; }
+        .plan-card.featured { background: var(--charcoal); }
+        .plan-badge {
+            position: absolute; top: 28px; right: 28px;
+            background: var(--gold); color: var(--charcoal);
+            font-size: 0.66rem; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase;
+            padding: 6px 14px;
+        }
+        .plan-name { font-size: 0.76rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); margin-bottom: 16px; display: block; }
+        .plan-price { font-family: 'Playfair Display', serif; font-size: 3.5rem; font-weight: 700; line-height: 1; margin-bottom: 8px; }
+        .plan-card:not(.featured) .plan-price { color: var(--text-dark); }
+        .plan-card.featured .plan-price { color: var(--ivory); }
+        .plan-period { font-size: 0.84rem; color: var(--warm-gray); margin-bottom: 40px; display: block; }
+        .plan-card.featured .plan-period { color: rgba(246,241,233,0.45); }
+        .plan-divider { height: 1px; background: rgba(92,16,51,0.1); margin-bottom: 36px; }
+        .plan-card.featured .plan-divider { background: rgba(201,164,92,0.15); }
+        .plan-features { list-style: none; display: flex; flex-direction: column; gap: 16px; margin-bottom: 48px; }
+        .plan-feature { display: flex; align-items: flex-start; gap: 14px; font-size: 0.88rem; }
+        .plan-card:not(.featured) .plan-feature { color: var(--text-dark); }
+        .plan-card.featured .plan-feature { color: rgba(246,241,233,0.75); }
+        .plan-check { color: var(--gold); font-weight: 700; flex-shrink: 0; margin-top: 1px; }
+        .plan-x { color: var(--warm-gray); opacity: 0.4; flex-shrink: 0; margin-top: 1px; }
+        .plan-btn { display: block; text-align: center; width: 100%; padding: 16px; font-family: 'Raleway', sans-serif; font-size: 0.82rem; font-weight: 700; letter-spacing: 0.13em; text-transform: uppercase; text-decoration: none; cursor: none; transition: all 0.3s; }
+        .plan-btn-free { background: transparent; border: 1px solid rgba(92,16,51,0.2); color: var(--text-dark); }
+        .plan-btn-free:hover { background: var(--text-dark); color: var(--ivory); }
+        .plan-btn-premium { background: var(--gold); color: var(--charcoal); border: none; }
+        .plan-btn-premium:hover { background: var(--ivory); transform: translateY(-2px); box-shadow: 0 12px 32px rgba(0,0,0,0.2); }
+
+        /* ── Signup Form ── */
+        .signup { background: var(--cream); padding: 100px 60px; }
+        .signup-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 100px; align-items: start; }
+        .signup-left .section-heading { color: var(--text-dark); margin-bottom: 24px; }
+        .signup-left .section-heading em { font-style: italic; color: var(--burgundy); }
+        .signup-left p { font-size: 0.95rem; line-height: 1.85; color: var(--warm-gray); margin-bottom: 40px; }
+        .trust-items { display: flex; flex-direction: column; gap: 16px; }
+        .trust-item { display: flex; align-items: center; gap: 14px; font-size: 0.86rem; color: var(--text-dark); }
+        .trust-icon { width: 36px; height: 36px; background: var(--burgundy); display: flex; align-items: center; justify-content: center; color: var(--gold); font-size: 0.9rem; flex-shrink: 0; }
+
+        .signup-form { background: var(--ivory); padding: 52px 48px; }
+        .form-title { font-family: 'Playfair Display', serif; font-size: 1.6rem; font-weight: 700; color: var(--text-dark); margin-bottom: 8px; }
+        .form-subtitle { font-size: 0.86rem; color: var(--warm-gray); margin-bottom: 36px; }
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; font-size: 0.76rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-dark); margin-bottom: 8px; }
+        .form-group input, .form-group select {
+            width: 100%; background: var(--cream); border: 1px solid rgba(92,16,51,0.15);
+            padding: 14px 16px; font-family: 'Raleway', sans-serif; font-size: 0.88rem;
+            color: var(--text-dark); outline: none; transition: border-color 0.3s; appearance: none;
+        }
+        .form-group input:focus, .form-group select:focus { border-color: var(--burgundy); }
+        .form-group input::placeholder { color: rgba(28,16,21,0.3); }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+        .form-check { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 28px; }
+        .form-check input[type="checkbox"] { width: 18px; height: 18px; margin-top: 2px; cursor: none; accent-color: var(--burgundy); flex-shrink: 0; }
+        .form-check label { font-size: 0.82rem; line-height: 1.6; color: var(--warm-gray); cursor: none; }
+        .form-check label a { color: var(--burgundy); text-decoration: none; }
+        .form-submit {
+            width: 100%; background: var(--burgundy); color: var(--ivory);
+            padding: 18px; font-family: 'Raleway', sans-serif;
+            font-size: 0.84rem; font-weight: 700; letter-spacing: 0.13em; text-transform: uppercase;
+            border: none; cursor: none; transition: all 0.3s; margin-bottom: 16px;
+        }
+        .form-submit:hover { background: var(--charcoal); transform: translateY(-2px); }
+        .form-note { font-size: 0.76rem; text-align: center; color: var(--warm-gray); line-height: 1.6; }
+
+        /* ── Social Proof ── */
+        .social-proof { background: var(--deep-wine); padding: 80px 60px; }
+        .proof-inner { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; }
+        .proof-item { text-align: center; padding: 40px 20px; border-right: 1px solid rgba(201,164,92,0.1); }
+        .proof-item:last-child { border-right: none; }
+        .proof-num { font-family: 'Playfair Display', serif; font-size: 2.8rem; font-weight: 700; color: var(--gold); display: block; }
+        .proof-label { font-size: 0.76rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(246,241,233,0.38); display: block; margin-top: 8px; }
+
+        /* ── FAQ ── */
+        .faq { background: var(--ivory); padding: 100px 60px; }
+        .faq-inner { display: grid; grid-template-columns: 1fr 2fr; gap: 80px; }
+        .faq-left .section-heading { color: var(--text-dark); }
+        .faq-list { display: flex; flex-direction: column; }
+        .faq-item { border-bottom: 1px solid rgba(92,16,51,0.1); overflow: hidden; }
+        .faq-question {
+            width: 100%; background: none; border: none; padding: 24px 0;
+            display: flex; align-items: center; justify-content: space-between;
+            font-family: 'Playfair Display', serif; font-size: 1.05rem; font-weight: 700;
+            color: var(--text-dark); cursor: none; text-align: left; gap: 20px;
+        }
+        .faq-icon { width: 24px; height: 24px; border: 1px solid rgba(92,16,51,0.2); display: flex; align-items: center; justify-content: center; font-size: 1rem; color: var(--burgundy); flex-shrink: 0; transition: all 0.3s; }
+        .faq-item.open .faq-icon { background: var(--burgundy); color: var(--ivory); transform: rotate(45deg); }
+        .faq-answer { max-height: 0; overflow: hidden; transition: max-height 0.4s ease; }
+        .faq-answer-inner { font-size: 0.9rem; line-height: 1.85; color: var(--warm-gray); padding-bottom: 24px; }
+
+        @media (max-width: 900px) {
+            .plans { padding: 80px 24px; }
+            .plans-grid { grid-template-columns: 1fr; max-width: 100%; }
+            .signup { padding: 80px 24px; }
+            .signup-inner { grid-template-columns: 1fr; gap: 48px; }
+            .signup-form { padding: 36px 28px; }
+            .form-row { grid-template-columns: 1fr; }
+            .social-proof { padding: 60px 24px; }
+            .proof-inner { grid-template-columns: repeat(2, 1fr); }
+            .proof-item { border-right: none; border-bottom: 1px solid rgba(201,164,92,0.1); }
+            .faq { padding: 80px 24px; }
+            .faq-inner { grid-template-columns: 1fr; gap: 40px; }
+        }
+    </style>
+</head>
+<body>
+<div class="cursor-dot" id="cursorDot"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<nav id="navbar">
+    <a href="index.html" class="nav-logo">Ladies<span>Ownly</span></a>
+    <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="community.html">Community</a></li>
+        <li><a href="events.html">Events</a></li>
+        <li><a href="join.html" class="nav-cta">Join Now</a></li>
+    </ul>
+    <button class="nav-toggle" aria-label="Menu"><span></span><span></span><span></span></button>
+</nav>
+
+<div class="page-hero">
+    <div class="page-hero-content">
+        <span class="page-hero-eyebrow">Membership</span>
+        <h1>Your Community<br>Is <em>Waiting</em></h1>
+        <p>Join 50,000+ women who've found their tribe, their mentors, and their momentum. Start free — no credit card required.</p>
+    </div>
+</div>
+
+<!-- Plans -->
+<section class="plans">
+    <div class="plans-header reveal">
+        <span class="section-tag center">Choose Your Plan</span>
+        <h2 class="section-heading">Simple, Honest Pricing</h2>
+        <p>Start free and upgrade when you're ready. No hidden fees, no lock-in contracts.</p>
+    </div>
+    <div class="plans-grid">
+        <div class="plan-card reveal">
+            <span class="plan-name">Free</span>
+            <div class="plan-price">£0</div>
+            <span class="plan-period">forever free · no card needed</span>
+            <div class="plan-divider"></div>
+            <ul class="plan-features">
+                <li class="plan-feature"><span class="plan-check">✓</span> Access to 10 communities</li>
+                <li class="plan-feature"><span class="plan-check">✓</span> Attend free virtual events</li>
+                <li class="plan-feature"><span class="plan-check">✓</span> Member directory access</li>
+                <li class="plan-feature"><span class="plan-check">✓</span> Weekly newsletter</li>
+                <li class="plan-feature"><span class="plan-check">✓</span> Community discussion access</li>
+                <li class="plan-feature"><span class="plan-x">✗</span> <span style="opacity:0.45">Mentorship matching</span></li>
+                <li class="plan-feature"><span class="plan-x">✗</span> <span style="opacity:0.45">Premium event discounts</span></li>
+                <li class="plan-feature"><span class="plan-x">✗</span> <span style="opacity:0.45">All 120+ communities</span></li>
+                <li class="plan-feature"><span class="plan-x">✗</span> <span style="opacity:0.45">1:1 networking sessions</span></li>
+            </ul>
+            <a href="#signup" class="plan-btn plan-btn-free">Get Started Free</a>
+        </div>
+        <div class="plan-card featured reveal">
+            <div class="plan-badge">Most Popular</div>
+            <span class="plan-name">Premium</span>
+            <div class="plan-price" style="color:var(--gold)">£12</div>
+            <span class="plan-period">per month · cancel anytime</span>
+            <div class="plan-divider"></div>
+            <ul class="plan-features">
+                <li class="plan-feature"><span class="plan-check">✓</span> All 120+ communities</li>
+                <li class="plan-feature"><span class="plan-check">✓</span> All virtual & in-person events</li>
+                <li class="plan-feature"><span class="plan-check">✓</span> Mentorship matching</li>
+                <li class="plan-feature"><span class="plan-check">✓</span> Premium event discounts (50%)</li>
+                <li class="plan-feature"><span class="plan-check">✓</span> 1:1 networking sessions</li>
+                <li class="plan-feature"><span class="plan-check">✓</span> Exclusive masterclasses</li>
+                <li class="plan-feature"><span class="plan-check">✓</span> Resource library & job board</li>
+                <li class="plan-feature"><span class="plan-check">✓</span> Priority event registration</li>
+                <li class="plan-feature"><span class="plan-check">✓</span> Member badge & profile verification</li>
+            </ul>
+            <a href="#signup" class="plan-btn plan-btn-premium">Start Premium — £12/mo</a>
+        </div>
+    </div>
+</section>
+
+<!-- Signup Form -->
+<section class="signup" id="signup">
+    <div class="signup-inner">
+        <div class="signup-left reveal">
+            <span class="section-tag">Create Your Account</span>
+            <h2 class="section-heading">Join the Women<br>Who Are <em>Owning It</em></h2>
+            <p>It takes less than 2 minutes to create your profile. Verification usually happens within 24 hours, and then you're in — permanently.</p>
+            <div class="trust-items">
+                <div class="trust-item"><div class="trust-icon">🔒</div>Your data is private and never sold.</div>
+                <div class="trust-item"><div class="trust-icon">✓</div>Verified women-only community.</div>
+                <div class="trust-item"><div class="trust-icon">💛</div>Cancel or change plans anytime.</div>
+                <div class="trust-item"><div class="trust-icon">🌍</div>Members in 82 countries.</div>
+            </div>
+        </div>
+        <div class="signup-form reveal">
+            <div class="form-title">Create Your Account</div>
+            <div class="form-subtitle">Free to join · No credit card needed to start</div>
+            <div class="form-row">
+                <div class="form-group"><label>First Name</label><input type="text" placeholder="e.g. Nadia"></div>
+                <div class="form-group"><label>Last Name</label><input type="text" placeholder="e.g. Osei"></div>
+            </div>
+            <div class="form-group"><label>Email Address</label><input type="email" placeholder="your@email.com"></div>
+            <div class="form-group"><label>Password</label><input type="password" placeholder="Min. 8 characters"></div>
+            <div class="form-group">
+                <label>Industry</label>
+                <select>
+                    <option value="" disabled selected>Select your industry</option>
+                    <option>Technology</option><option>Finance</option><option>Healthcare</option>
+                    <option>Creative & Design</option><option>Entrepreneurship</option>
+                    <option>Education</option><option>Law & Policy</option><option>Other</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Membership Plan</label>
+                <select>
+                    <option value="free">Free — £0/month</option>
+                    <option value="premium">Premium — £12/month</option>
+                </select>
+            </div>
+            <div class="form-check">
+                <input type="checkbox" id="terms">
+                <label for="terms">I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>. I confirm that I identify as a woman.</label>
+            </div>
+            <button type="button" class="form-submit">Create My Account →</button>
+            <p class="form-note">Already a member? <a href="#" style="color:var(--burgundy);text-decoration:none;font-weight:600">Sign in here</a></p>
+        </div>
+    </div>
+</section>
+
+<!-- Social Proof -->
+<div class="social-proof">
+    <div class="proof-inner">
+        <div class="proof-item reveal"><span class="proof-num">50K+</span><span class="proof-label">Members Worldwide</span></div>
+        <div class="proof-item reveal"><span class="proof-num">98%</span><span class="proof-label">Would Recommend</span></div>
+        <div class="proof-item reveal"><span class="proof-num">£0</span><span class="proof-label">To Get Started</span></div>
+        <div class="proof-item reveal"><span class="proof-num">24hrs</span><span class="proof-label">Avg. Verification Time</span></div>
+    </div>
+</div>
+
+<!-- FAQ -->
+<section class="faq">
+    <div class="faq-inner">
+        <div class="reveal"><span class="section-tag">Common Questions</span><h2 class="section-heading">Things Women<br>Often Ask</h2></div>
+        <div class="faq-list reveal">
+            <div class="faq-item">
+                <button class="faq-question">How does verification work? <div class="faq-icon">+</div></button>
+                <div class="faq-answer"><div class="faq-answer-inner">After creating your account, our team manually reviews your profile to confirm you identify as a woman. We may ask for a LinkedIn profile, social link, or brief bio. This typically takes under 24 hours and is done to protect our community's safety and integrity.</div></div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-question">Can I switch from Free to Premium later? <div class="faq-icon">+</div></button>
+                <div class="faq-answer"><div class="faq-answer-inner">Absolutely. You can upgrade to Premium at any time directly from your account settings. Your verification and profile stay intact — you simply unlock more features the moment you upgrade.</div></div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-question">Is LadiesOwnly available in my country? <div class="faq-icon">+</div></button>
+                <div class="faq-answer"><div class="faq-answer-inner">Yes! LadiesOwnly is fully digital and available to women in all 195 countries. We also have active local chapters in Lagos, London, Mumbai, Singapore, Toronto, and São Paulo for in-person events.</div></div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-question">What is your refund policy? <div class="faq-icon">+</div></button>
+                <div class="faq-answer"><div class="faq-answer-inner">Premium membership is billed monthly. You can cancel at any time with no penalty — your access continues until the end of your billing period. We offer a 7-day full refund for first-time Premium subscribers, no questions asked.</div></div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-question">How is LadiesOwnly different from LinkedIn Groups? <div class="faq-icon">+</div></button>
+                <div class="faq-answer"><div class="faq-answer-inner">LadiesOwnly is built exclusively for women, verified and moderated to ensure a safe, respectful environment. Unlike LinkedIn, we are not a professional profile tool — we're a genuine community where women speak honestly, support each other, and grow together. No spam, no self-promotion culture, no harassment.</div></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<footer>
+    <div class="footer-top">
+        <div class="footer-brand"><a href="index.html" class="footer-logo-link">Ladies<span>Ownly</span></a><p>A safe, empowering space for women to connect, grow, and thrive — built by women, for women.</p></div>
+        <div class="footer-col"><h4>Platform</h4><ul><li><a href="community.html">Communities</a></li><li><a href="events.html">Events</a></li><li><a href="about.html#mentorship">Mentorship</a></li><li><a href="join.html">Membership</a></li></ul></div>
+        <div class="footer-col"><h4>Company</h4><ul><li><a href="about.html">About Us</a></li><li><a href="about.html#values">Our Values</a></li><li><a href="about.html#team">Team</a></li><li><a href="#">Press</a></li></ul></div>
+        <div class="footer-col"><h4>Support</h4><ul><li><a href="#">Help Centre</a></li><li><a href="#">Privacy Policy</a></li><li><a href="#">Terms of Use</a></li><li><a href="#">Contact</a></li></ul></div>
+    </div>
+    <div class="footer-bottom"><p class="footer-copy">© 2026 LadiesOwnly. All rights reserved.</p><div class="footer-social"><a href="#">IG</a><a href="#">TW</a><a href="#">LI</a><a href="#">YT</a></div></div>
+</footer>
+
+<script src="js/main.js"></script>
+<script>
+    // FAQ accordion
+    document.querySelectorAll('.faq-question').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const item = btn.parentElement;
+            const answer = item.querySelector('.faq-answer');
+            const isOpen = item.classList.contains('open');
+            document.querySelectorAll('.faq-item').forEach(i => {
+                i.classList.remove('open');
+                i.querySelector('.faq-answer').style.maxHeight = '0';
+            });
+            if (!isOpen) {
+                item.classList.add('open');
+                answer.style.maxHeight = answer.scrollHeight + 'px';
+            }
+        });
+    });
+</script>
+</body>
+</html>

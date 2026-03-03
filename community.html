@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Community — LadiesOwnly</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400;1,700&family=Raleway:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        /* ── Filter Bar ── */
+        .filter-bar { background: var(--ivory); padding: 40px 60px; border-bottom: 1px solid rgba(92,16,51,0.08); }
+        .filter-inner { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+        .filter-label { font-size: 0.76rem; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--warm-gray); margin-right: 8px; }
+        .filter-btn {
+            padding: 8px 20px; background: transparent; border: 1px solid rgba(92,16,51,0.15);
+            font-family: 'Raleway', sans-serif; font-size: 0.78rem; font-weight: 600;
+            letter-spacing: 0.1em; text-transform: uppercase; color: var(--warm-gray);
+            cursor: none; transition: all 0.25s;
+        }
+        .filter-btn:hover, .filter-btn.active { background: var(--burgundy); border-color: var(--burgundy); color: var(--ivory); }
+
+        /* ── Communities Grid ── */
+        .communities { background: var(--ivory); padding: 80px 60px 120px; }
+        .communities-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+        .community-card {
+            background: var(--cream); padding: 40px 36px;
+            border-bottom: 3px solid transparent; transition: all 0.35s ease; cursor: none;
+        }
+        .community-card:hover { border-bottom-color: var(--gold); transform: translateY(-4px); box-shadow: 0 20px 48px rgba(28,8,18,0.08); }
+        .community-card:hover .community-arrow { transform: translateX(4px); opacity: 1; }
+        .community-icon { font-size: 2rem; margin-bottom: 20px; display: block; }
+        .community-tag {
+            display: inline-block; font-size: 0.68rem; font-weight: 700;
+            letter-spacing: 0.15em; text-transform: uppercase;
+            color: var(--gold); margin-bottom: 12px;
+        }
+        .community-name { font-family: 'Playfair Display', serif; font-size: 1.3rem; font-weight: 700; color: var(--text-dark); margin-bottom: 12px; }
+        .community-desc { font-size: 0.86rem; line-height: 1.75; color: var(--warm-gray); margin-bottom: 24px; }
+        .community-footer { display: flex; align-items: center; justify-content: space-between; }
+        .community-members { font-size: 0.78rem; font-weight: 600; color: var(--warm-gray); }
+        .community-members strong { color: var(--text-dark); }
+        .community-arrow { font-size: 1.2rem; color: var(--gold); opacity: 0; transition: all 0.3s; }
+
+        /* ── Featured Community ── */
+        .featured-community { background: var(--deep-wine); padding: 120px 60px; overflow: hidden; }
+        .featured-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; position: relative; z-index: 1; }
+        .featured-community::before {
+            content: ''; position: absolute; right: 0; top: 0; bottom: 0; width: 40%;
+            background: radial-gradient(ellipse at right, rgba(201,164,92,0.1) 0%, transparent 70%);
+        }
+        .featured-label { font-size: 0.76rem; font-weight: 700; letter-spacing: 0.22em; text-transform: uppercase; color: var(--gold); margin-bottom: 20px; display: block; }
+        .featured-title { font-family: 'Playfair Display', serif; font-size: clamp(2rem, 3.5vw, 3rem); font-weight: 700; color: var(--ivory); margin-bottom: 20px; line-height: 1.15; }
+        .featured-title em { font-style: italic; color: var(--gold); }
+        .featured-desc { font-size: 0.95rem; line-height: 1.85; color: rgba(246,241,233,0.55); margin-bottom: 40px; }
+        .featured-stats { display: flex; gap: 40px; margin-bottom: 40px; }
+        .featured-stat-num { font-family: 'Playfair Display', serif; font-size: 2rem; font-weight: 700; color: var(--gold); display: block; }
+        .featured-stat-lbl { font-size: 0.74rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(246,241,233,0.4); display: block; margin-top: 4px; }
+        .featured-visual {
+            background: var(--wine); padding: 48px; position: relative;
+            display: flex; flex-direction: column; gap: 16px;
+        }
+        .community-post {
+            background: rgba(246,241,233,0.06); padding: 20px 24px;
+            border-left: 2px solid var(--gold); border-radius: 0;
+        }
+        .post-author { font-size: 0.76rem; font-weight: 700; color: var(--gold); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 8px; }
+        .post-text { font-size: 0.88rem; line-height: 1.6; color: rgba(246,241,233,0.7); font-style: italic; }
+
+        /* ── How Communities Work ── */
+        .how-communities { background: var(--cream); padding: 120px 60px; }
+        .how-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 100px; align-items: center; }
+        .how-text .section-heading { color: var(--text-dark); margin-bottom: 48px; }
+        .how-list { display: flex; flex-direction: column; gap: 32px; }
+        .how-item { display: flex; gap: 24px; align-items: flex-start; }
+        .how-num { font-family: 'Playfair Display', serif; font-size: 2.5rem; font-weight: 700; color: var(--gold); opacity: 0.4; line-height: 1; flex-shrink: 0; width: 48px; }
+        .how-item-title { font-family: 'Playfair Display', serif; font-size: 1.1rem; font-weight: 700; color: var(--text-dark); margin-bottom: 8px; }
+        .how-item-text { font-size: 0.88rem; line-height: 1.75; color: var(--warm-gray); }
+        .how-visual {
+            background: var(--charcoal); padding: 52px; position: relative; overflow: hidden;
+        }
+        .how-visual::before {
+            content: ''; position: absolute; top: -60px; right: -60px; width: 200px; height: 200px;
+            background: radial-gradient(circle, rgba(201,164,92,0.15) 0%, transparent 70%);
+        }
+        .community-rule { padding: 20px 0; border-bottom: 1px solid rgba(201,164,92,0.1); display: flex; align-items: center; gap: 16px; }
+        .community-rule:last-child { border-bottom: none; }
+        .rule-icon { width: 32px; height: 32px; background: rgba(201,164,92,0.1); display: flex; align-items: center; justify-content: center; color: var(--gold); font-size: 0.9rem; flex-shrink: 0; }
+        .rule-text { font-size: 0.86rem; color: rgba(246,241,233,0.6); line-height: 1.5; }
+        .rule-text strong { color: var(--ivory); font-weight: 600; }
+
+        /* ── CTA ── */
+        .community-cta { background: var(--burgundy); padding: 120px 60px; text-align: center; overflow: hidden; }
+        .community-cta h2 { font-family: 'Playfair Display', serif; font-size: clamp(2rem, 4vw, 3.5rem); font-weight: 700; color: var(--ivory); max-width: 600px; margin: 0 auto 20px; position: relative; }
+        .community-cta h2 em { font-style: italic; color: var(--gold); }
+        .community-cta p { font-size: 1rem; color: rgba(246,241,233,0.55); max-width: 400px; margin: 0 auto 48px; position: relative; }
+        .community-cta .actions { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; position: relative; }
+
+        @media (max-width: 900px) {
+            .filter-bar { padding: 28px 24px; }
+            .communities { padding: 60px 24px 80px; }
+            .communities-grid { grid-template-columns: 1fr; gap: 16px; }
+            .featured-community { padding: 80px 24px; }
+            .featured-inner { grid-template-columns: 1fr; gap: 48px; }
+            .how-communities { padding: 80px 24px; }
+            .how-inner { grid-template-columns: 1fr; gap: 48px; }
+            .community-cta { padding: 80px 24px; }
+        }
+    </style>
+</head>
+<body>
+<div class="cursor-dot" id="cursorDot"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<nav id="navbar">
+    <a href="index.html" class="nav-logo">Ladies<span>Ownly</span></a>
+    <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="community.html">Community</a></li>
+        <li><a href="events.html">Events</a></li>
+        <li><a href="join.html" class="nav-cta">Join Now</a></li>
+    </ul>
+    <button class="nav-toggle" aria-label="Menu"><span></span><span></span><span></span></button>
+</nav>
+
+<div class="page-hero">
+    <div class="page-hero-content">
+        <span class="page-hero-eyebrow">Find Your People</span>
+        <h1>120+ Communities<br><em>Made</em> for You</h1>
+        <p>From tech founders to wellness advocates, from new mothers to seasoned executives — there's a community here that feels like it was built just for you.</p>
+    </div>
+</div>
+
+<!-- Filter -->
+<div class="filter-bar">
+    <div class="filter-inner">
+        <span class="filter-label">Browse by:</span>
+        <button class="filter-btn active">All</button>
+        <button class="filter-btn">Career</button>
+        <button class="filter-btn">Wellness</button>
+        <button class="filter-btn">Entrepreneurship</button>
+        <button class="filter-btn">Creativity</button>
+        <button class="filter-btn">Lifestyle</button>
+        <button class="filter-btn">Motherhood</button>
+    </div>
+</div>
+
+<!-- Communities Grid -->
+<section class="communities">
+    <div class="communities-grid" data-stagger>
+        <div class="community-card reveal">
+            <span class="community-icon">💼</span>
+            <span class="community-tag">Career</span>
+            <h3 class="community-name">Women in Tech</h3>
+            <p class="community-desc">Engineers, PMs, designers, and founders building the future of technology. Job opportunities, code reviews, and real talk about navigating a male-dominated industry.</p>
+            <div class="community-footer"><span class="community-members"><strong>8,400</strong> members</span><span class="community-arrow">→</span></div>
+        </div>
+        <div class="community-card reveal">
+            <span class="community-icon">🌿</span>
+            <span class="community-tag">Wellness</span>
+            <h3 class="community-name">Mind & Body</h3>
+            <p class="community-desc">A judgement-free space for mental health conversations, fitness journeys, nutrition, and holistic wellness practices. Because you can't pour from an empty cup.</p>
+            <div class="community-footer"><span class="community-members"><strong>6,200</strong> members</span><span class="community-arrow">→</span></div>
+        </div>
+        <div class="community-card reveal">
+            <span class="community-icon">🚀</span>
+            <span class="community-tag">Entrepreneurship</span>
+            <h3 class="community-name">Founders & Builders</h3>
+            <p class="community-desc">For women building businesses from the ground up. Pitch feedback, funding resources, co-founder matching, and support from women who've been in the trenches.</p>
+            <div class="community-footer"><span class="community-members"><strong>5,800</strong> members</span><span class="community-arrow">→</span></div>
+        </div>
+        <div class="community-card reveal">
+            <span class="community-icon">🎨</span>
+            <span class="community-tag">Creativity</span>
+            <h3 class="community-name">Creative Collective</h3>
+            <p class="community-desc">Writers, artists, musicians, photographers, and makers. Share your work, find collaborators, navigate the business of being a creative, and be inspired daily.</p>
+            <div class="community-footer"><span class="community-members"><strong>4,100</strong> members</span><span class="community-arrow">→</span></div>
+        </div>
+        <div class="community-card reveal">
+            <span class="community-icon">👩‍👧</span>
+            <span class="community-tag">Motherhood</span>
+            <h3 class="community-name">Mothers Who Lead</h3>
+            <p class="community-desc">Because motherhood and ambition are not opposites. A community for women navigating parenthood alongside careers, businesses, and big dreams.</p>
+            <div class="community-footer"><span class="community-members"><strong>7,300</strong> members</span><span class="community-arrow">→</span></div>
+        </div>
+        <div class="community-card reveal">
+            <span class="community-icon">💰</span>
+            <span class="community-tag">Finance</span>
+            <h3 class="community-name">Women & Wealth</h3>
+            <p class="community-desc">Investing, financial independence, salary negotiation, real estate, and building generational wealth. Demystifying money for women — no condescension allowed.</p>
+            <div class="community-footer"><span class="community-members"><strong>5,100</strong> members</span><span class="community-arrow">→</span></div>
+        </div>
+        <div class="community-card reveal">
+            <span class="community-icon">🌍</span>
+            <span class="community-tag">Lifestyle</span>
+            <h3 class="community-name">Global Nomads</h3>
+            <p class="community-desc">Women who travel, live abroad, or are building location-independent lives. City guides, remote work tips, expat stories, and a worldwide network of women you can trust.</p>
+            <div class="community-footer"><span class="community-members"><strong>3,800</strong> members</span><span class="community-arrow">→</span></div>
+        </div>
+        <div class="community-card reveal">
+            <span class="community-icon">⚖️</span>
+            <span class="community-tag">Career</span>
+            <h3 class="community-name">Women in Law & Policy</h3>
+            <p class="community-desc">Lawyers, policymakers, advocates, and public servants shaping society. Legal career advice, policy discussions, and solidarity across the legal profession.</p>
+            <div class="community-footer"><span class="community-members"><strong>2,900</strong> members</span><span class="community-arrow">→</span></div>
+        </div>
+        <div class="community-card reveal">
+            <span class="community-icon">✨</span>
+            <span class="community-tag">Wellness</span>
+            <h3 class="community-name">Spiritual & Soulful</h3>
+            <p class="community-desc">Faith, spirituality, meditation, and inner growth. A gentle, open-minded space for women exploring what nourishes their soul — whatever form that takes.</p>
+            <div class="community-footer"><span class="community-members"><strong>3,200</strong> members</span><span class="community-arrow">→</span></div>
+        </div>
+    </div>
+</section>
+
+<!-- Featured Community -->
+<section class="featured-community">
+    <div class="featured-inner">
+        <div class="reveal">
+            <span class="featured-label">Community Spotlight</span>
+            <h2 class="featured-title">Founders & Builders:<br>Where <em>Ambition</em> Lives</h2>
+            <p class="featured-desc">Our fastest-growing community, Founders & Builders, has helped launch over 200 businesses, facilitated $4M+ in peer funding, and matched 150+ co-founder pairs in the past year alone.</p>
+            <div class="featured-stats">
+                <div><span class="featured-stat-num">5,800</span><span class="featured-stat-lbl">Members</span></div>
+                <div><span class="featured-stat-num">200+</span><span class="featured-stat-lbl">Businesses Launched</span></div>
+                <div><span class="featured-stat-num">$4M+</span><span class="featured-stat-lbl">Peer Funding</span></div>
+            </div>
+            <a href="join.html" class="btn-primary">Join This Community <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+        </div>
+        <div class="featured-visual reveal">
+            <div class="community-post">
+                <div class="post-author">Kezia M. · Lagos</div>
+                <div class="post-text">"Just signed my first enterprise client — 6 figures! Two weeks ago I was terrified to send the proposal. Thank you to everyone who reviewed it here."</div>
+            </div>
+            <div class="community-post">
+                <div class="post-author">Rachel T. · Toronto</div>
+                <div class="post-text">"Looking for a technical co-founder for my HealthTech startup. I have the product vision, traction, and 18 months runway. DM me!"</div>
+            </div>
+            <div class="community-post">
+                <div class="post-author">Yuki S. · Tokyo</div>
+                <div class="post-text">"The pitch deck workshop yesterday was everything. I rewrote my entire slide 3 and investors are responding so differently now."</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- How Communities Work -->
+<section class="how-communities">
+    <div class="how-inner">
+        <div class="how-text reveal">
+            <span class="section-tag">How It Works</span>
+            <h2 class="section-heading">Your Community,<br>Your Rules</h2>
+            <div class="how-list">
+                <div class="how-item"><span class="how-num">01</span><div><div class="how-item-title">Join communities that match your interests</div><p class="how-item-text">Browse by topic, industry, life stage, or location. Join as many as you like — there's no limit to belonging.</p></div></div>
+                <div class="how-item"><span class="how-num">02</span><div><div class="how-item-title">Introduce yourself and start connecting</div><p class="how-item-text">Every community has an intro thread. Say hello, share what brought you here, and watch the conversation begin.</p></div></div>
+                <div class="how-item"><span class="how-num">03</span><div><div class="how-item-title">Contribute, ask, and grow together</div><p class="how-item-text">Share wins, ask for advice, post resources, find collaborators. The more you give, the more you receive.</p></div></div>
+            </div>
+        </div>
+        <div class="how-visual reveal">
+            <div style="margin-bottom:24px;"><span style="font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:700;color:var(--ivory);display:block;margin-bottom:4px;">Community Guidelines</span><span style="font-size:0.78rem;color:rgba(246,241,233,0.38);letter-spacing:0.1em;text-transform:uppercase;">What makes our communities different</span></div>
+            <div class="community-rule"><div class="rule-icon">✓</div><div class="rule-text"><strong>Verified women only</strong> — every member is authenticated before joining.</div></div>
+            <div class="community-rule"><div class="rule-icon">✓</div><div class="rule-text"><strong>Zero tolerance</strong> for harassment, discrimination, or negativity.</div></div>
+            <div class="community-rule"><div class="rule-icon">✓</div><div class="rule-text"><strong>What's shared here, stays here</strong> — confidentiality is sacred.</div></div>
+            <div class="community-rule"><div class="rule-icon">✓</div><div class="rule-text"><strong>Celebrate others' wins</strong> — we rise by lifting each other.</div></div>
+            <div class="community-rule"><div class="rule-icon">✓</div><div class="rule-text"><strong>Moderated 24/7</strong> by trained community managers who care.</div></div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA -->
+<section class="community-cta">
+    <span class="section-tag center">Ready?</span>
+    <h2>Find Your People.<br>Start <em>Today</em>.</h2>
+    <p>Join LadiesOwnly and get instant access to all 120+ communities.</p>
+    <div class="actions">
+        <a href="join.html" class="btn-light">Join for Free <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+        <a href="events.html" class="btn-outline">Browse Events</a>
+    </div>
+</section>
+
+<footer>
+    <div class="footer-top">
+        <div class="footer-brand"><a href="index.html" class="footer-logo-link">Ladies<span>Ownly</span></a><p>A safe, empowering space for women to connect, grow, and thrive — built by women, for women.</p></div>
+        <div class="footer-col"><h4>Platform</h4><ul><li><a href="community.html">Communities</a></li><li><a href="events.html">Events</a></li><li><a href="about.html#mentorship">Mentorship</a></li><li><a href="join.html">Membership</a></li></ul></div>
+        <div class="footer-col"><h4>Company</h4><ul><li><a href="about.html">About Us</a></li><li><a href="about.html#values">Our Values</a></li><li><a href="about.html#team">Team</a></li><li><a href="#">Press</a></li></ul></div>
+        <div class="footer-col"><h4>Support</h4><ul><li><a href="#">Help Centre</a></li><li><a href="#">Privacy Policy</a></li><li><a href="#">Terms of Use</a></li><li><a href="#">Contact</a></li></ul></div>
+    </div>
+    <div class="footer-bottom"><p class="footer-copy">© 2026 LadiesOwnly. All rights reserved.</p><div class="footer-social"><a href="#">IG</a><a href="#">TW</a><a href="#">LI</a><a href="#">YT</a></div></div>
+</footer>
+
+<script src="js/main.js"></script>
+<script>
+    // Filter buttons
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+        });
+    });
+</script>
+</body>
+</html>
